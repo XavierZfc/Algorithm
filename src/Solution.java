@@ -1,13 +1,39 @@
+import java.util.HashMap;
 
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
 class Solution {
-    public boolean isSymmetric(TreeNode root) {
-        if (root == null) return true;
-        return isSym(root.right,root.left);
+    public static void main(String[] args) {
+        new Solution().levelOrder(new TreeNode(1));
     }
-    Boolean isSym (TreeNode left ,TreeNode right  ){
-        if (left == null && right == null) return true;
-        if (left == null || right == null || left.val != right.val) return false;
+    HashMap<Integer,Integer> hashMap = new HashMap<>();
+    int n = 0 ;
+    public int[] levelOrder(TreeNode root) {
+        if(root == null){
+            return null ;
+        }
+        dfs(root);
+        int m = n;
+        int[] arr = new int[m];
+        for(int a=0 ;a<=n ;a++){
+            System.out.println(n);
+            arr[a] = (int)hashMap.get(a);
+        }
+        return arr;
+    }
 
-        return isSym(left.left,right.right) && isSym(left.right , right.left);
+    void dfs(TreeNode root ){
+        if(root == null) return;
+            hashMap.put(n++,root.val);
+        dfs(root.left);
+        dfs(root.right);
+
     }
 }
