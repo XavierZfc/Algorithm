@@ -1,17 +1,13 @@
 
 class Solution {
-    public TreeNode mirrorTree(TreeNode root) {
-        if (root == null) return null;
-        mirror(root);
-        return root;
+    public boolean isSymmetric(TreeNode root) {
+        if (root == null) return true;
+        return isSym(root.right,root.left);
     }
-    void mirror (TreeNode root) {
-        if (root == null) return;
-        TreeNode left = root.left;
-        root.left = root.right;
-        root.right = left;
+    Boolean isSym (TreeNode left ,TreeNode right  ){
+        if (left == null && right == null) return true;
+        if (left == null || right == null || left.val != right.val) return false;
 
-        mirror(root.right);
-        mirror(root.left);
+        return isSym(left.left,right.right) && isSym(left.right , right.left);
     }
 }
