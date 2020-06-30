@@ -1,21 +1,17 @@
 
 class Solution {
-    public ListNode reverseList(ListNode head) {
+    public boolean isSubStructure(TreeNode A, TreeNode B) {
+        if (A == null || B == null) return false;
+        if (issub(A,B)) return true;
 
-        if (head == null) return null;
-        visit(head);
-        return root;
+        return isSubStructure(A.left,B) || isSubStructure(A.right,B);
     }
-    ListNode root ;
-    ListNode visit (ListNode head ){
-        if (head.next == null) {
-            root = head;
-            return head;
-        }
-        ListNode listNode = visit(head.next);
-        listNode.next = head;
-        head.next = null;
 
-        return head;
+    Boolean issub (TreeNode a , TreeNode b){
+
+        if (b == null) return true;
+        if (a == null || a.val != b.val) return false;
+
+        return         issub(a.left,b.left) && issub(a.right,b.right) ;
     }
 }
