@@ -1,17 +1,17 @@
 
 class Solution {
-    public boolean isSubStructure(TreeNode A, TreeNode B) {
-        if (A == null || B == null) return false;
-        if (issub(A,B)) return true;
-
-        return isSubStructure(A.left,B) || isSubStructure(A.right,B);
+    public TreeNode mirrorTree(TreeNode root) {
+        if (root == null) return null;
+        mirror(root);
+        return root;
     }
+    void mirror (TreeNode root) {
+        if (root == null) return;
+        TreeNode left = root.left;
+        root.left = root.right;
+        root.right = left;
 
-    Boolean issub (TreeNode a , TreeNode b){
-
-        if (b == null) return true;
-        if (a == null || a.val != b.val) return false;
-
-        return         issub(a.left,b.left) && issub(a.right,b.right) ;
+        mirror(root.right);
+        mirror(root.left);
     }
 }
