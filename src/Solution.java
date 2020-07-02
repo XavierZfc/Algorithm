@@ -1,39 +1,33 @@
-import java.util.HashMap;
 
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode(int x) { val = x; }
- * }
- */
 class Solution {
     public static void main(String[] args) {
-        new Solution().levelOrder(new TreeNode(1));
-    }
-    HashMap<Integer,Integer> hashMap = new HashMap<>();
-    int n = 0 ;
-    public int[] levelOrder(TreeNode root) {
-        if(root == null){
-            return null ;
-        }
-        dfs(root);
-        int m = n;
-        int[] arr = new int[m];
-        for(int a=0 ;a<=n ;a++){
-            System.out.println(n);
-            arr[a] = (int)hashMap.get(a);
-        }
-        return arr;
-    }
+        TreeNode root = new TreeNode(1);
+        TreeNode root1 = new TreeNode(2);
+        TreeNode root2 = new TreeNode(3);
+        root.left = root1;
+        root.right = root2;
 
-    void dfs(TreeNode root ){
-        if(root == null) return;
-            hashMap.put(n++,root.val);
-        dfs(root.left);
-        dfs(root.right);
+        System.out.println(                new Solution().lowestCommonAncestor(root,root1,root).val);
+    }
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if (root==null || p==null || q==null)return root;
+        return         dfs(root,p,q);
+    }
+    TreeNode dfs (TreeNode head,TreeNode p ,TreeNode q){
+        if (head == null) return null;
 
+        TreeNode left = dfs(head.left ,p,q);
+        TreeNode right = dfs(head.right,p,q);
+
+        if (left!=null && right!=null) {
+            return left;
+        }
+        if (p==head || q==head){
+            if (left!=null||right!=null){
+                    return p==head?p:q;
+            }
+            return head;
+        }
+        return left==null?right:left;
     }
 }
