@@ -1,33 +1,24 @@
 
 class Solution {
-    public static void main(String[] args) {
-        TreeNode root = new TreeNode(1);
-        TreeNode root1 = new TreeNode(2);
-        TreeNode root2 = new TreeNode(3);
-        root.left = root1;
-        root.right = root2;
-
-        System.out.println(                new Solution().lowestCommonAncestor(root,root1,root).val);
-    }
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        if (root==null || p==null || q==null)return root;
-        return         dfs(root,p,q);
+        if (root==null || q==null || p==null) return null;
+        if (p.val > q.val) {
+            return dfs(root,q.val,p.val);
+        }else
+            return dfs(root,p.val,q.val);
     }
-    TreeNode dfs (TreeNode head,TreeNode p ,TreeNode q){
-        if (head == null) return null;
+    TreeNode dfs (TreeNode root ,int p ,int q){
+        if (root == null) return null;
 
-        TreeNode left = dfs(head.left ,p,q);
-        TreeNode right = dfs(head.right,p,q);
+        TreeNode left =null,right=null;
 
-        if (left!=null && right!=null) {
-            return left;
-        }
-        if (p==head || q==head){
-            if (left!=null||right!=null){
-                    return p==head?p:q;
-            }
-            return head;
+        if (p>=root.val) right = dfs(root.right,p,q);
+        else if (q<=root.val){
+            left = dfs(root.left,p,q);
+        }else {
+            return root;
         }
         return left==null?right:left;
     }
+
 }
