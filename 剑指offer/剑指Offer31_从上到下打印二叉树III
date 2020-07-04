@@ -1,0 +1,31 @@
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
+class Solution {
+    public List<List<Integer>> levelOrder(TreeNode root) {
+
+        List<List<Integer>> lists = new LinkedList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
+
+        queue.add(root);
+        while (!queue.isEmpty()){
+
+            int size = queue.size();
+            List<Integer> list = new LinkedList<>();
+            for (int a=0;a<size;a++){
+                root = queue.poll();
+                if (root == null) continue;
+
+                list.add(root.val);
+                queue.add(root.left);
+                queue.add(root.right);
+            }
+            //这里必须判断list的元素的数量不为0
+            //否则[[3],[9,20],[15,7]],会输出为[[3],[9,20],[15,7],[]]，多了一个[]
+            if(list.size() != 0)
+                lists.add(list);
+        }
+        return lists;
+    }
+}
