@@ -1,0 +1,35 @@
+
+class Solution {
+    List<List<Integer>> lists = new LinkedList<>();
+    LinkedList<Integer> list = new LinkedList<>();
+
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
+        if (root == null) return new LinkedList<>();
+        visit(root,sum);
+        return lists;
+    }
+    void visit (TreeNode root , int sum ){
+
+        if (root == null) return;
+        sum -= root.val;
+
+        //因为-2,null,-3  -5 他们小于0，所以不能加上下面一行
+        // if (sum < 0) return;
+
+        list.add(root.val);
+        /**
+         * 这里特别注意：
+         * 这里必须new一个新的，否则后面list变了，我们加入的也会变
+         * 就因为这个，浪费了我半个小时。。。
+         */
+        if (sum == 0 && root.left==null && root.right == null) {
+            lists.add(new LinkedList<>(list));
+            list.removeLast();
+            return ;
+        }
+        visit(root.left,sum);
+        visit(root.right,sum);
+        list.removeLast();
+
+    }
+}
