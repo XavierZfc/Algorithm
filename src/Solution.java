@@ -1,24 +1,92 @@
 
 class Solution {
-    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        if (root==null || q==null || p==null) return null;
-        if (p.val > q.val) {
-            return dfs(root,q.val,p.val);
-        }else
-            return dfs(root,p.val,q.val);
-    }
-    TreeNode dfs (TreeNode root ,int p ,int q){
-        if (root == null) return null;
+    /**
+     *
+     * 数组实际上可以分为三种，如下面的所示
+     * 1 2 3             1  2  3  4         1 2 3 4
+     * 4 5 6             5  6  7  8         5 6 7 8
+     * 7 8 9             9 10 11 12
+     *
+     * 1. 一层层的遍历后，只剩下一个行列都是1的数组，如第一个数组中的5
+     * 2. 一层层的遍历后，只剩下一个行或者列为1的数组，如第二个数组中的6 7
+     * 3. 一层层的遍历后，没有剩下什么，即行列为0的数组
+     *
+     * 所以我们首先得知道怎么对数组进行一层层的遍历
+     * 要遍历我们首先要知道
+     * 1. 当前我们要遍历的元素的位置
+     * 2. 去掉一些层数后，现在数组的大小，即我们就需要这个数组的上边界，下边界，左边界，右边界
+     *
+     * 所以我们在下面定义了四个变量，left_row , left_col , right_row , right_col
+     * 他们的初始值是左上角和右下角的行列值
+     *
+     * 然后我们就可以一层层的遍历，遍历时上边界和左边界++，下边界和右边界--
+     *
+     * 但是我们还需要进行特殊处理
+     * 1. 当只有一个元素的数组或者有一个行或列的值为1的数组
+     *      一个元素数组的遍历我们也可以用一个行或列为1的数组的代码来完成
+     *      首先判断是行还是列为1，然后遍历即可
+     *
+     * 2. 刚好遍历完
+     *      这个的条件实际上是，左边界大于右边界，上边界小于下边界
+     */
 
-        TreeNode left =null,right=null;
+    public int[] spiralOrder(int[][] matrix) {
 
-        if (p>=root.val) right = dfs(root.right,p,q);
-        else if (q<=root.val){
-            left = dfs(root.left,p,q);
-        }else {
-            return root;
+        if (matrix == null || matrix.length == 0 || matrix[0] == null || matrix[0].length == 0) return new int[0];
+
+        int len_row = matrix.length;
+        int len_col = matrix[0].length;
+
+        //arr是我们进行存储的数组，point是我们现在要存储的位置
+        int[] arr = new int[len_col*len_row];
+        int point = 0 ;
+
+        //左上角的行列数
+        int left_row = 0;
+        int left_col = 0;
+
+        //右下角的行列数
+        int right_row = len_row-1;
+        int right_col = len_col-1;
+
+        //当行列都不为1，就调用addToArr()
+        while (right_col>left_col && right_row>left_row){
+            point = addToArr(arr,point,matrix,left_row++,left_col++,right_row--,right_col--);
         }
-        return left==null?right:left;
+
+        // 如果刚好遍历完成，就返回
+        if(left_col>right_col || left_row>right_row) return arr ;
+
+        //遍历行或者列为1的数组，判断是行还是列是1
+        if (right_col==left_col){
+            for (int a=left_row ; a<=right_row ;a++){
+                arr[point++] = matrix[a][left_col];
+            }
+        }else {
+            for (int a=left_col ; a<=right_col ;a++){
+                arr[point++] = matrix[left_row][a];
+            }
+        }
+        return arr;
     }
 
+    //addToArr 方法是遍历数组的最外层，但是该数组的行或列不能为1
+    int  addToArr (int[] arr,int point ,int[][] matrix ,int left_row ,int left_col ,int right_row ,int right_col){
+
+        for (int a=left_col ; a<=right_col ; a++){
+            arr[point++] = matrix[left_row][a];
+        }
+        for (int a=left_row+1 ; a<=right_row ; a++){
+            arr[point++] = matrix[a][right_col];
+        }
+        for (int a=right_col-1 ; a>=left_col ; a--){
+            arr[point++] = matrix[right_row][a];
+        }
+        System.out.println(point);
+        for (int a=right_row-1 ; a>=left_row+1 ; a--){
+            arr[point++] = matrix[a][left_col];
+        }
+
+        return point;
+    }
 }
