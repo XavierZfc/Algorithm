@@ -1,0 +1,34 @@
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+
+class Solution {
+    public int[] levelOrder(TreeNode root) {
+        //Queue是抽象类，所以这里使用他的一个子类LinkedList
+        Queue<TreeNode> queue = new LinkedList();
+        ArrayList<Integer> arrayList = new ArrayList<>();
+
+        queue.add(root);
+
+        while (!queue.isEmpty()){
+            int size = queue.size();
+            while (size-- >0){
+                root = queue.poll();
+                if (root==null) continue;
+
+                //如果root为null，即继续循环，否则把左右节点加入（左右节点可能为null）
+                queue.add(root.left);
+                queue.add(root.right);
+
+                arrayList.add(root.val);
+            }
+        }
+
+        //因为要求返回int[] ,而 ArrayList.toArray()返回的是Object[]，所以不能使用
+        int[] arr = new int[arrayList.size()];
+        for (int a=0 ;a<arrayList.size();a++){
+            arr[a] = arrayList.get(a);
+        }
+        return arr;
+    }
+}
