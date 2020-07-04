@@ -1,0 +1,31 @@
+class Solution {
+    /**
+     * 这个题的思路是：
+     * 最后一个元素是root节点
+     * 所以我们从后往前找到第一个小于root节点的值
+     * 这个节点之前的数组得是全部小于root节点的值
+     * 后面的都得大于等于root节点的值
+     */
+    public boolean verifyPostorder(int[] postorder) {
+
+        if (postorder==null || postorder.length==0) return true;
+        return lastOrder(postorder,0,postorder.length-1);
+    }
+    Boolean lastOrder (int[] arr ,int left ,int right){
+        if (left >= right ) return true;
+        int point = right;
+
+        int val = arr[right];
+
+        //要有point>=left，因为可能有1,2,3,4,5的输入，导致数组越界
+        while ( point>=left && arr[point] >= val ) point--;
+
+        for (int a=left ; a<=point ;a++){
+            if (arr[a] > val) return false;
+        }
+        for (int a=point+1; a<right ;a++){
+            if (arr[a] < val) return false;
+        }
+        return lastOrder(arr,left,point) && lastOrder(arr,point+1,right-1);
+    }
+}
