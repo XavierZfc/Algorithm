@@ -1,0 +1,45 @@
+import java.util.Stack;
+
+class Solution {
+    /**
+     *
+     * 下面中值得注意的：
+     * 1， 短路与，stack.isEmpty()要写在前面，否则有stackEmptyException
+     * 2. 下面我们进行判断的是pushed.length,而不是常用的length-1，因为因为我们加入最后一个元素后，还++
+     */
+    public boolean validateStackSequences(int[] pushed, int[] popped) {
+
+        if(pushed == null || pushed.length ==0) return true;
+
+        //point_push point_pop 分别是 pushed popped数组当前指向的数组元素所在位置
+        Stack<Integer> stack = new Stack<>();
+        int point_push = 1 ;
+        int point_pop = 0;
+
+        //当数组为空，说明成功
+        stack.push(pushed[0]);
+        while (!stack.isEmpty()){
+
+            //这里!stack.isEmpty()，因为要利用短路与的特性
+            //因为把这个写到了后面，导致我浪费10分钟排查这个问题。。。。。
+            while (!stack.isEmpty() &&stack.peek() == popped[point_pop] ){
+                stack.pop();
+                point_pop++;
+                //如果没有下面这个，会导致emptyStackException
+                //因为当point_pop到了poped的最后一个，说明栈空了，但是还会进行下一次的循环
+                if (point_pop == pushed.length) return true;
+            }
+
+            //如果pushed没有越界就push
+            //因为可能我们把所有pushed的元素都加入了，但是还在循环里面
+            if (point_push < pushed.length)
+                stack.push(pushed[point_push++]);
+
+            //但是如果栈顶的元素和poped当前的元素不同，栈不会pop，导致死循环
+            //==pushed.length，而不是length-1,是因为我们加入最后一个元素后，还++
+            if (point_push == pushed.length && stack.peek()!=popped[point_pop]) return false;
+
+        }
+        return true;
+    }
+}
