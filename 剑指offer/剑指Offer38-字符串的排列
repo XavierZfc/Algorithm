@@ -1,0 +1,55 @@
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+
+/**
+ * 思路：
+ * 这道题等价于求一副扑克牌的排列方案数。
+ * 我们可以固定最上面一张，有 54 张可以放到最上面，
+ * 固定了第一张，我们开始固定第二张，这个时候就只有 53 中情况
+ * 持续固定，当固定到最后一张，一个排列方案就生成了
+ *
+ * 下面代码中，c 数组就是我们固定的顺序
+ */
+class Solution {
+    List<String> res = new LinkedList<>();
+    char[] c;
+    public String[] permutation(String s) {
+        c = s.toCharArray();
+        dfs(0);
+        return res.toArray(new String[res.size()]);
+        /**
+         * 这里我们可以使用，LinkedList 类中的 toArray 方法来将他们转换为数组
+         * 如果该方法我们不设置输入参数，那么默认转换为 Object 类型的数组
+         * 我们需要 String 类型的数组，所以输入参数是 res.size() 大小的 String 数组
+         */
+    }
+    void dfs(int x) {
+        if(x == c.length - 1) {
+            res.add(String.valueOf(c)); // 添加排列方案
+            return;
+        }
+        /**
+         * 这里 HashSet 的目的是去除排列 "aab" 时重复的情况
+         * aab 在固定时，实际上只有 a,b 两种情况
+         * 所以，当前面我们已经固定了，就跳过这个
+         * 如果没有 HashSet ，输入 aab 时，编译后的答案为：
+         *[aab, aba, aab, aba, baa, baa]
+         */
+        HashSet<Character> set = new HashSet<>();
+        for(int i = x; i < c.length; i++) {
+            if(set.contains(c[i])) continue; // 重复，因此剪枝
+            set.add(c[i]);
+            swap(i, x); // 交换，将 c[i] 固定在第 x 位 
+            dfs(x + 1); // 开启固定第 x + 1 位字符
+            swap(i, x); // 恢复交换
+        }
+    }
+    void swap(int a, int b) {
+        char tmp = c[a];
+        c[a] = c[b];
+        c[b] = tmp;
+    }
+}
