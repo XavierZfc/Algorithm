@@ -1,0 +1,48 @@
+class Solution {
+    public int movingCount(int m, int n, int k) {
+        boolean[][] visited = new boolean[m][n];
+        return dfs(m,n,0,0,k,visited);
+    }
+
+    /**
+     *
+     * @param m 数组的行
+     * @param n 数组的列
+     * @param row 当前指向的行
+     * @param col 当前指向的列
+     * @param k 行列位数之和最大值
+     * @param visited 该节点是否遍历过
+     */
+    int dfs (int m,int n,int row ,int col,int k,boolean[][] visited){
+
+        /**
+         * 1. 位数之和大于 k
+         * 2. 该节点越界了
+         * 3. 已经遍历过了
+         * 如果是上面三种情况，就return 0
+         */
+        if (!count(row,col ,k) || row >= m || col>=n || visited[row][col]) return 0;
+
+        //往下，往右遍历，当前节点设置为遍历过了
+        visited[row][col] = true;
+        int down = dfs(m,n,row,col+1,k,visited);
+        int right = dfs(m,n,row+1,col,k,visited);
+
+        return right+down+1;
+    }
+    
+    //判断当前节点的位数之和有没有大于k
+    boolean count (int m, int n, int k){
+        int val = 0;
+        while (m >0 ){
+            val += m%10;
+            m /= 10 ;
+        }
+        while (n > 0){
+            val += n%10;
+            n /= 10;
+        }
+        if (val <= k) return true;
+        return false;
+    }
+}
