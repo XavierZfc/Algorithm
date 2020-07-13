@@ -1,0 +1,30 @@
+class Solution {
+    public int maxValue(int[][] grid) {
+        if(grid == null || grid[0].length == 0) return 0;
+
+        //解决行列都只有一个
+        if(grid.length==1 && grid[0].length ==1) return grid[0][0];
+
+        for(int a=1 ;a<grid.length;a++){
+            grid[a][0] += grid[a-1][0];
+        }
+        //当只有一列时
+        if(grid[0].length ==1 )return grid[grid.length-1][0];
+
+        for(int a=1 ;a<grid[0].length;a++){
+            grid[0][a] += grid[0][a-1];
+        }
+        //当只有一行时
+        if(grid.length ==1 )return grid[0][grid[0].length-1];
+
+        for(int a=1 ; a<grid.length ;a++){
+            for(int b=1 ; b<grid[0].length ;b++){
+                grid[a][b] = Math.max(
+                        grid[a][b]+grid[a-1][b],
+                        grid[a][b]+grid[a][b-1]
+                );
+            }
+        }
+        return grid[grid.length-1][grid[0].length-1];
+    }
+}
