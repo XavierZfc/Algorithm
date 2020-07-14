@@ -1,0 +1,30 @@
+import java.util.Arrays;
+
+class Solution {
+    public static void main(String[] args) {
+        int[] arr= {5,3,6,2,4,1};
+        new Solution().quickSort(arr,0,arr.length-1);
+        System.out.println(Arrays.toString(arr));
+    }
+    void quickSort(int[] arr ,int left,int right){
+        if(left>=right) return;
+
+        int val = arr[left];
+        int point = left+1 ;
+        for(int a=left;a<=right;a++){
+            if(arr[a] < val ){
+                swap(arr,point++,a);
+            }
+        }
+        point--;
+        swap(arr,point,left);
+
+        quickSort(arr,left,point-1);
+        quickSort(arr,point+1,right);
+    }
+    void swap (int[] arr ,int a,int b){
+        int temp = arr[a];
+        arr[a] = arr[b];
+        arr[b] = temp;
+    }
+}
