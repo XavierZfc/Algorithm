@@ -1,0 +1,35 @@
+class Solution {
+    public ListNode reverseKGroup(ListNode head, int k) {
+
+        //next节点指向 k+1 个节点，last指向 k 个节点
+        ListNode next = head;
+        ListNode last = null;
+
+        //如果为null，说明当前未满 k 个，last设置为第k个节点
+        for(int a=0 ;a<k ;a++){
+            if(next == null) return head;
+            if(a == k-1) last = next;
+            next = next.next;
+        }
+        //进行反转，把last.next设置为null，不然会把last后面的一起反转
+        last.next = null;
+        next = reverseKGroup(next,k);
+        last = reverse(head);
+        last.next = next;
+        return root ;
+    }
+
+    //root指向头结点，注意：这里的root被多次使用
+    //下面的函数用来反转链表，返回反转后的最后一个节点
+    ListNode root = null;
+    ListNode reverse(ListNode head ){
+        if(head.next == null){
+            root = head;
+            return head;
+        }
+        ListNode next = reverse(head.next);
+        next.next = head;
+        head.next = null;
+        return head;
+    }
+}
