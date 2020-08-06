@@ -1,0 +1,36 @@
+ public void quickSort(int[] arr,int left,int right){
+        if (left >= right) return;
+
+        int val = arr[left];
+        int p1 = left;
+        int p2 = right;
+
+        while (p1 < p2){
+            //这里必须先右再左，因为这样的话p1,p2最终指向的是最后一个小于val的值
+            //如果先左再右，指向的是第一个大于val的值，
+            //  最终的是swqp(arr,left,p1-1);可能会导致数组越界（因为0-1 = -1）
+            /**先左再右的代码
+             *         while (p1 < p2){
+             *             while (arr[p1] <= val && p1<p2) p1++;
+             *             while (arr[p2] >= val && p1<p2) p2--;
+             *             swqp(arr,p1,p2);
+             *         }
+             *         swqp(arr,left,p1-1);
+             *         
+             * 如果是长度为2的数组，先做再右，不能排序
+             * 【6，5】，先左再右，p1=p2=1，不能交换
+             * 同时swap(arr,left,p1-1); p1-1 = left，不能交换
+             */
+            while (arr[p2] >= val && p1<p2) p2--;
+            while (arr[p1] <= val && p1<p2) p1++;
+            swqp(arr,p1,p2);
+        }
+        swqp(arr,left,p1);
+        quickSort(arr,left,p1-1);
+        quickSort(arr,p1+1,right);
+    }
+    public void swqp(int[] arr,int a,int b){
+        int val = arr[a];
+        arr[a] = arr[b];
+        arr[b] = val;
+    }

@@ -1,0 +1,30 @@
+import java.util.*;
+public class Solution{
+    public int[] mergerSort (int[] arr){
+        if (arr.length<=1) return arr;
+
+        int point = arr.length/2;
+        int[] arr1 = Arrays.copyOfRange(arr,0,point);
+        int[] arr2 = Arrays.copyOfRange(arr,point,arr.length);
+        System.out.print(Arrays.toString(arr1));
+        System.out.print("   ");
+        System.out.println(Arrays.toString(arr2));
+        return merge(mergerSort(arr1),mergerSort(arr2));
+    }
+    public int[] merge(int[] arr1,int[] arr2){
+        int p,p1,p2;
+        p = p1 = p2 = 0;
+        int[] arr = new int[arr1.length+arr2.length];
+        while (p1<arr1.length && p2<arr2.length){
+            if (arr1[p1] > arr2[p2]){
+                arr[p++] = arr1[p1++];
+            }else
+                arr[p++] = arr2[p2++];
+        }
+        while (p1<arr1.length)
+            arr[p++] = arr1[p1++];
+        while (p2<arr2.length)
+            arr[p++] = arr2[p2++];
+        return arr;
+    }
+}
